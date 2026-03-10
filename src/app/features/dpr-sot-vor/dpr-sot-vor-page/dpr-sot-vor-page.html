@@ -1,0 +1,481 @@
+<!-- <div class="page">
+
+  <div class="qlik-strip">
+    <div class="strip-left">
+      <span class="strip-dot"></span>
+      <span class="strip-dot"></span>
+      <span class="strip-dot"></span>
+    </div>
+
+    <mat-chip-listbox class="strip-chips" aria-label="Selections">
+      <mat-chip-option selected>Site_Code: {{ selectedSite() }}</mat-chip-option>
+      <mat-chip-option selected>STA: {{ selectedStaVhm() }}</mat-chip-option>
+      <mat-chip-option selected>Case Type: {{ selectedCaseType() }}</mat-chip-option>
+    </mat-chip-listbox>
+
+    <div class="strip-right"></div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-tile">SOT</div>
+    <div class="kpi-number">{{ totalCases() }}</div>
+    <div class="kpi-spacer"></div>
+  </div>
+
+  <div class="layout">
+
+    <mat-card class="filters">
+      <h3>Filters</h3>
+
+      <div class="filter-block">
+        <label>Week</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedWeek()" (selectionChange)="selectedWeek.set($event.value)">
+            <mat-option *ngFor="let w of weekOptions()" [value]="w">{{ w }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="filter-block">
+        <label>Supplier Region</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedRegion()" (selectionChange)="selectedRegion.set($event.value)">
+            <mat-option *ngFor="let r of regionOptions()" [value]="r">{{ r }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="filter-block">
+        <label>SOT Status</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedStatus()" (selectionChange)="selectedStatus.set($event.value)">
+            <mat-option *ngFor="let st of statusOptions" [value]="st">{{ st }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <button mat-stroked-button class="clear-btn" type="button" (click)="clearColumnFilters()">
+        Clear column filters
+      </button>
+    </mat-card>
+
+    <main class="main">
+
+      <div class="top-row">
+
+        <mat-card class="card table-card">
+
+          <div class="card-head">
+            <div class="card-title">Table</div>
+
+            <button
+              mat-icon-button
+              class="expand-icon"
+              (click)="openExpandedTable()"
+              aria-label="Expand table"
+              title="Expand"
+            >
+              <mat-icon>open_in_full</mat-icon>
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="sot-table">
+              <thead>
+                <tr>
+                  <th class="th-blue">
+                    <span>Site</span>
+                    <button mat-icon-button [matMenuTriggerFor]="siteMenu" class="head-icon" aria-label="Site filter">
+                      <mat-icon>search</mat-icon>
+                    </button>
+                    <mat-menu #siteMenu="matMenu" xPosition="after" yPosition="below">
+                      <button mat-menu-item *ngFor="let s of availableSites()" (click)="pickSite(s)">
+                        {{ s }}
+                      </button>
+                    </mat-menu>
+                  </th>
+
+                  <th class="th-blue">
+                    <span>STA VHM</span>
+                    <button mat-icon-button [matMenuTriggerFor]="staMenu" class="head-icon" aria-label="STA filter">
+                      <mat-icon>search</mat-icon>
+                    </button>
+                    <mat-menu #staMenu="matMenu" xPosition="after" yPosition="below">
+                      <button mat-menu-item *ngFor="let st of availableStaVhms()" (click)="pickSta(st)">
+                        {{ st }}
+                      </button>
+                    </mat-menu>
+                  </th>
+
+                  <th class="th-blue">
+                    <span>Case<br/>Type</span>
+                    <button mat-icon-button [matMenuTriggerFor]="typeMenu" class="head-icon" aria-label="Case type filter">
+                      <mat-icon>search</mat-icon>
+                    </button>
+                    <mat-menu #typeMenu="matMenu" xPosition="after" yPosition="below">
+                      <button mat-menu-item (click)="pickCaseType('ALL')">ALL</button>
+                      <button mat-menu-item (click)="pickCaseType('Proactive')">Proactive</button>
+                      <button mat-menu-item (click)="pickCaseType('Reactive')">Reactive</button>
+                    </mat-menu>
+                  </th>
+
+                  <th class="th-open">Open<br/>Cases</th>
+                  <th class="th-red">Red<br/>Cases</th>
+                  <th class="th-yellow">Yellow<br/>Cases</th>
+                  <th class="th-green">Green<br/>Cases</th>
+                  <th class="th-closed">Closed<br/>Cases</th>
+                </tr>
+
+                <tr class="selected-row">
+                  <td colspan="8">
+                    <strong>Selected:</strong>
+                    <span class="pill">Site: {{ selectedSite() }}</span>
+                    <span class="pill">STA: {{ selectedStaVhm() }}</span>
+                    <span class="pill">Type: {{ selectedCaseType() }}</span>
+                  </td>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let r of tableRows()">
+                  <td>{{ r.siteCode }}</td>
+                  <td>{{ r.staVhm }}</td>
+                  <td>{{ r.caseType }}</td>
+                  <td>{{ r.open }}</td>
+                  <td>{{ r.red }}</td>
+                  <td>{{ r.yellow }}</td>
+                  <td>{{ r.green }}</td>
+                  <td>{{ r.closed }}</td>
+                </tr>
+
+                <tr *ngIf="tableRows().length === 0">
+                  <td colspan="8" class="empty">No rows match the current filters.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card>
+
+        <mat-card class="card chart-card">
+          <div class="card-title">SOT Cases</div>
+          <div class="chart-sub"># Cases - {{ counts().total }}</div>
+
+          <div class="qlik-chart">
+            <div class="bar">
+              <div class="seg red" [style.width.%]="counts().total ? (counts().red / counts().total) * 100 : 0"></div>
+              <div class="seg yellow" [style.width.%]="counts().total ? (counts().yellow / counts().total) * 100 : 0"></div>
+              <div class="seg green" [style.width.%]="counts().total ? (counts().green / counts().total) * 100 : 0"></div>
+            </div>
+
+            <div class="legend">
+              <div><span class="dot open"></span> Open: {{ counts().open }}</div>
+              <div><span class="dot closed"></span> Closed: {{ counts().closed }}</div>
+              <div><span class="dot red"></span> Red: {{ counts().red }}</div>
+              <div><span class="dot yellow"></span> Yellow: {{ counts().yellow }}</div>
+              <div><span class="dot green"></span> Green: {{ counts().green }}</div>
+            </div>
+          </div>
+        </mat-card>
+
+      </div>
+
+      <div class="bottom-row">
+        <mat-card class="card cases-summary">
+          <div class="card-title">Cases Summary</div>
+
+          <div class="mini-bars">
+            <div class="mini">
+              <div class="mini-label">Open</div>
+              <div class="mini-pill open"></div>
+              <div class="mini-num">{{ counts().open }}</div>
+            </div>
+
+            <div class="mini">
+              <div class="mini-label">Red</div>
+              <div class="mini-pill red"></div>
+              <div class="mini-num">{{ counts().red }}</div>
+            </div>
+
+            <div class="mini">
+              <div class="mini-label">Yellow</div>
+              <div class="mini-pill yellow"></div>
+              <div class="mini-num">{{ counts().yellow }}</div>
+            </div>
+
+            <div class="mini">
+              <div class="mini-label">Green</div>
+              <div class="mini-pill green"></div>
+              <div class="mini-num">{{ counts().green }}</div>
+            </div>
+
+            <div class="mini">
+              <div class="mini-label">Closed</div>
+              <div class="mini-pill closed"></div>
+              <div class="mini-num">{{ counts().closed }}</div>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="card sites-card">
+          <div class="card-title"># Sites</div>
+
+          <div class="site-tiles">
+            <div class="site-tile active">
+              <div class="label">Active</div>
+              <div class="value">{{ activeSitesCount() }}</div>
+            </div>
+
+            <div class="site-tile inactive">
+              <div class="label">Inactive</div>
+              <div class="value">{{ inactiveSitesCount() }}</div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+    </main>
+  </div>
+</div> -->
+
+<div class="sot-page">
+
+  <!-- selection strip -->
+  <div class="top-strip">
+    <div class="strip-left">
+      <span class="menu-box">☰</span>
+      <span class="menu-box">⋯</span>
+    </div>
+
+    <div class="selection-chips">
+      <div class="chip">Site_NorthAmerica_...</div>
+      <div class="chip">bin_num</div>
+      <div class="chip">Site_Code<br><small>{{ selectedSite() }}</small></div>
+    </div>
+  </div>
+
+  <!-- title row -->
+  <div class="title-row">
+    <div class="page-title">
+      G2811 - APTIV SERVICES US LLC
+    </div>
+
+    <div class="site-meta">
+      Site Address: AVE DE LAS INDUSTRIAS SN, CIUDAD JUAREZ, CH, &nbsp;&nbsp; country: MX | Postal Code: 32470
+    </div>
+  </div>
+
+  <div class="main-layout">
+
+    <!-- left filter panel -->
+    <aside class="left-panel">
+      <div class="left-block">
+        <div class="left-label">Week</div>
+        <div class="select-box active">{{ selectedWeek() }}</div>
+      </div>
+
+      <div class="left-block">
+        <div class="left-section-title">Premium Filters</div>
+        <div class="input-box">S+Z Flag</div>
+      </div>
+
+      <div class="left-block">
+        <div class="input-box">Premium Code Binning</div>
+        <div class="input-box">premium_code</div>
+      </div>
+
+      <div class="left-block status-panel">
+        <div class="status-title">Filter SOT Status</div>
+        <div class="status-item">SOT Case Status</div>
+        <div class="status-item muted">Filter SOT_Active</div>
+        <div class="status-item muted">Filter SOT Type</div>
+      </div>
+
+      <div class="pager-dots">
+        <span class="arrow">‹</span>
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="left-block">
+        <div class="left-label">Supplier</div>
+        <div class="select-box">{{ selectedRegion() }}</div>
+      </div>
+
+      <div class="left-block">
+        <div class="input-box">Parent Code</div>
+      </div>
+    </aside>
+
+    <!-- center/right content -->
+    <section class="content">
+
+      <!-- KPI -->
+      <div class="kpi-row">
+        <div class="kpi-tile">
+          <div class="kpi-name">SOT</div>
+          <div class="kpi-value">{{ totalCases() }}</div>
+        </div>
+
+        <div class="top-divider"></div>
+      </div>
+
+      <!-- upper content -->
+      <div class="upper-grid">
+
+        <!-- table -->
+        <div class="table-area">
+          <table class="sot-table">
+            <thead>
+              <tr>
+                <th>
+                  <span>Site</span>
+                  <button mat-icon-button [matMenuTriggerFor]="siteMenu" class="head-icon">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                  <mat-menu #siteMenu="matMenu">
+                    <button mat-menu-item *ngFor="let s of availableSites()" (click)="pickSite(s)">
+                      {{ s }}
+                    </button>
+                  </mat-menu>
+                </th>
+
+                <th>
+                  <span>STA VHM</span>
+                  <button mat-icon-button [matMenuTriggerFor]="staMenu" class="head-icon">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                  <mat-menu #staMenu="matMenu">
+                    <button mat-menu-item *ngFor="let st of availableStaVhms()" (click)="pickSta(st)">
+                      {{ st }}
+                    </button>
+                  </mat-menu>
+                </th>
+
+                <th>
+                  <span>Case Type</span>
+                  <button mat-icon-button [matMenuTriggerFor]="typeMenu" class="head-icon">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                  <mat-menu #typeMenu="matMenu">
+                    <button mat-menu-item (click)="pickCaseType('ALL')">ALL</button>
+                    <button mat-menu-item (click)="pickCaseType('Proactive')">Proactive</button>
+                    <button mat-menu-item (click)="pickCaseType('Reactive')">Reactive</button>
+                  </mat-menu>
+                </th>
+
+                <th class="open-col">Open Cases</th>
+                <th class="red-col">Red Cases</th>
+                <th class="yellow-col">Yellow Cases</th>
+                <th class="green-col">Green Cases</th>
+                <th class="menu-col">
+                  <button mat-icon-button (click)="openExpandedTable()">
+                    <mat-icon>more_horiz</mat-icon>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let r of tableRows()">
+                <td>{{ r.siteCode }}</td>
+                <td>{{ r.staVhm }}</td>
+                <td>{{ r.caseType }}</td>
+                <td>{{ r.open }}</td>
+                <td>{{ r.red }}</td>
+                <td>{{ r.yellow }}</td>
+                <td>{{ r.green }}</td>
+                <td>{{ r.closed }}</td>
+              </tr>
+
+              <tr *ngIf="tableRows().length === 0">
+                <td colspan="8" class="empty">No rows match the current filters.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- chart -->
+        <div class="chart-area">
+          <div class="chart-title">SOT Cases</div>
+          <div class="chart-sub"># Cases - {{ counts().total }}</div>
+
+          <div class="chart-box">
+            <div class="grid-line line1"></div>
+            <div class="grid-line line2"></div>
+            <div class="grid-line line3"></div>
+
+            <div class="single-bar-wrap">
+              <div class="bar-value">{{ counts().green }}</div>
+              <div class="single-bar"></div>
+              <div class="bar-x-label">G2811</div>
+            </div>
+
+            <div class="case-type-filter">
+              <div class="case-head">
+                <span>Case Type</span>
+                <mat-icon>search</mat-icon>
+              </div>
+              <div class="case-item">Proactive</div>
+              <div class="case-item">Reactive</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- bottom KPIs -->
+      <div class="bottom-grid">
+
+        <div class="summary-kpis">
+          <div class="mini-kpi">
+            <div class="mini-title">Open</div>
+            <div class="mini-sub"># ID Cases</div>
+            <div class="mini-num">{{ counts().open }}</div>
+          </div>
+
+          <div class="mini-kpi">
+            <div class="mini-title">Red</div>
+            <div class="mini-sub"># ID Cases</div>
+            <div class="mini-num">{{ counts().red }}</div>
+          </div>
+
+          <div class="mini-kpi">
+            <div class="mini-title">Yellow</div>
+            <div class="mini-sub"># ID Cases</div>
+            <div class="mini-num">{{ counts().yellow }}</div>
+          </div>
+
+          <div class="mini-kpi green-box">
+            <div class="mini-title">Green</div>
+            <div class="mini-sub"># ID Cases</div>
+            <div class="mini-num">{{ counts().green }}</div>
+          </div>
+
+          <div class="mini-kpi nodata">
+            <div class="mini-title">Closed</div>
+            <div class="mini-sub"># ID Cases</div>
+            <div class="no-data-text">No Data to display</div>
+          </div>
+        </div>
+
+        <div class="sites-box">
+          <div class="sites-title"># Sites</div>
+
+          <div class="site-count-row">
+            <div class="site-label">Active</div>
+            <div class="site-value active">{{ activeSitesCount() }}</div>
+          </div>
+
+          <div class="site-count-row">
+            <div class="site-label">Inactive</div>
+            <div class="site-value inactive">{{ inactiveSitesCount() }}</div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </div>
+</div>

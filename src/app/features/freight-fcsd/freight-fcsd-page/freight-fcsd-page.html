@@ -1,0 +1,414 @@
+<!-- <div class="page">
+
+  <div class="qlik-strip">
+    <div class="strip-left">
+      <span class="strip-dot"></span>
+      <span class="strip-dot"></span>
+      <span class="strip-dot"></span>
+    </div>
+
+    <mat-chip-listbox class="strip-chips" aria-label="Selections">
+      <mat-chip-option selected>VHM: {{ selectedVhm() }}</mat-chip-option>
+      <mat-chip-option selected>Site_Code: {{ selectedSite() }}</mat-chip-option>
+      <mat-chip-option selected>Freight Month: {{ selectedFreightMonth() }}</mat-chip-option>
+      <mat-chip-option selected>DPR Month: {{ selectedDprMonth() }}</mat-chip-option>
+      <mat-chip-option selected>Part Number: {{ selectedPartNumber() }}</mat-chip-option>
+      <mat-chip-option selected>Ship Year: {{ selectedShipYear() }}</mat-chip-option>
+    </mat-chip-listbox>
+
+    <div class="strip-right"></div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-tile">Premium Freight</div>
+    <div class="kpi-number">{{ totalRecords() }}</div>
+    <div class="kpi-spacer"></div>
+  </div>
+
+  <div class="layout">
+
+    <mat-card class="filters">
+      <h3>Filters</h3>
+
+      <div class="filter-block">
+        <label>VHM</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedVhm()" (selectionChange)="selectedVhm.set($event.value)">
+            <mat-option *ngFor="let v of vhmOptions()" [value]="v">{{ v }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="filter-block">
+        <label>Site</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedSite()" (selectionChange)="selectedSite.set($event.value)">
+            <mat-option *ngFor="let s of siteOptions()" [value]="s">{{ s }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="filter-block">
+        <label>Freight Month</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedFreightMonth()" (selectionChange)="selectedFreightMonth.set($event.value)">
+            <mat-option *ngFor="let m of freightMonthOptions()" [value]="m">{{ m }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="filter-block">
+        <label>DPR Month</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedDprMonth()" (selectionChange)="selectedDprMonth.set($event.value)">
+            <mat-option *ngFor="let d of dprMonthOptions()" [value]="d">{{ d }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="filter-block">
+        <label>Part Number</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedPartNumber()" (selectionChange)="selectedPartNumber.set($event.value)">
+            <mat-option *ngFor="let p of partNumberOptions()" [value]="p">{{ p }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="filter-block">
+        <label>Ship Year</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-select [value]="selectedShipYear()" (selectionChange)="selectedShipYear.set($event.value)">
+            <mat-option *ngFor="let y of shipYearOptions" [value]="y">{{ y }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <button mat-stroked-button class="clear-btn" type="button" (click)="clearFilters()">
+        Clear filters
+      </button>
+    </mat-card>
+
+    <main class="main">
+
+      <div class="top-row">
+
+        <mat-card class="card table-card">
+
+          <div class="card-head">
+            <div class="card-title">Premium Freight Data - Aggregated Data</div>
+
+            <button
+              mat-icon-button
+              class="expand-icon"
+              (click)="openExpandedTable()"
+              aria-label="Expand table"
+              title="Expand"
+            >
+              <mat-icon>open_in_full</mat-icon>
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="sot-table freight-table">
+              <thead>
+                <tr>
+                  <th rowspan="2" class="th-blue">
+                    <span>Site</span>
+                  </th>
+
+                  <th rowspan="2" class="th-blue">
+                    <span>VHM</span>
+                  </th>
+
+                  <th colspan="2" class="th-blue year-group">2024</th>
+                  <th colspan="2" class="th-blue year-group">2025</th>
+                  <th colspan="2" class="th-blue year-group">2026</th>
+                </tr>
+
+                <tr>
+                  <th class="th-open">Qty</th>
+                  <th class="th-open">Tot Amt</th>
+                  <th class="th-open">Qty</th>
+                  <th class="th-open">Tot Amt</th>
+                  <th class="th-open">Qty</th>
+                  <th class="th-open">Tot Amt</th>
+                </tr>
+
+                <tr class="selected-row">
+                  <td colspan="8">
+                    <strong>Selected:</strong>
+                    <span class="pill">VHM: {{ selectedVhm() }}</span>
+                    <span class="pill">Site: {{ selectedSite() }}</span>
+                    <span class="pill">Freight Month: {{ selectedFreightMonth() }}</span>
+                    <span class="pill">DPR Month: {{ selectedDprMonth() }}</span>
+                    <span class="pill">Part: {{ selectedPartNumber() }}</span>
+                    <span class="pill">Year: {{ selectedShipYear() }}</span>
+                  </td>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let r of tableRows()">
+                  <td>{{ r.siteCode }}</td>
+                  <td>{{ r.vhm }}</td>
+
+                  <td>{{ r.qty2024 }}</td>
+                  <td>{{ r.amount2024 | currency:'USD':'symbol':'1.0-0' }}</td>
+
+                  <td>{{ r.qty2025 }}</td>
+                  <td>{{ r.amount2025 | currency:'USD':'symbol':'1.0-0' }}</td>
+
+                  <td>{{ r.qty2026 }}</td>
+                  <td>{{ r.amount2026 | currency:'USD':'symbol':'1.0-0' }}</td>
+                </tr>
+
+                <tr *ngIf="tableRows().length === 0">
+                  <td colspan="8" class="empty">No rows match the current filters.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card>
+
+        <mat-card class="card chart-card">
+          <div class="card-title">Part Counts</div>
+          <div class="chart-sub">Qty by Ship Year</div>
+
+          <div class="year-chart">
+            <div class="y-axis">
+              <span>200</span>
+              <span>150</span>
+              <span>100</span>
+              <span>50</span>
+              <span>0</span>
+            </div>
+
+            <div class="bars-wrap">
+              <div class="bars">
+                <div class="bar-col" *ngFor="let bar of chartBars()">
+                  <div class="bar-value">{{ bar.value }}</div>
+                  <div class="bar-box">
+                    <div class="bar-fill" [style.height]="bar.height"></div>
+                  </div>
+                  <div class="bar-label">{{ bar.year }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+
+      </div>
+
+      <div class="bottom-row">
+        <mat-card class="card cases-summary">
+          <div class="card-title">Freight Summary</div>
+
+          <div class="mini-bars">
+            <div class="mini">
+              <div class="mini-label">2024 Qty</div>
+              <div class="mini-pill open"></div>
+              <div class="mini-num">{{ yearlyTotals().qty2024 }}</div>
+            </div>
+
+            <div class="mini">
+              <div class="mini-label">2025 Qty</div>
+              <div class="mini-pill yellow"></div>
+              <div class="mini-num">{{ yearlyTotals().qty2025 }}</div>
+            </div>
+
+            <div class="mini">
+              <div class="mini-label">2026 Qty</div>
+              <div class="mini-pill green"></div>
+              <div class="mini-num">{{ yearlyTotals().qty2026 }}</div>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="card sites-card">
+          <div class="card-title">Overview</div>
+
+          <div class="site-tiles">
+            <div class="site-tile active">
+              <div class="label">Sites</div>
+              <div class="value">{{ totalSites() }}</div>
+            </div>
+
+            <div class="site-tile inactive">
+              <div class="label">Amount</div>
+              <div class="value">{{ totalAmount() | currency:'USD':'symbol':'1.0-0' }}</div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+    </main>
+  </div>
+</div> -->
+
+<div class="freight-page">
+
+  <!-- top qlik strip -->
+  <div class="top-strip">
+    <div class="strip-left">
+      <span class="menu-box">☰</span>
+      <span class="menu-box">⋯</span>
+    </div>
+
+    <div class="selection-chips">
+      <div class="chip">Site_NorthAmerica_... </div>
+      <div class="chip">bin_num</div>
+      <div class="chip">Site_Code<br><small>{{ selectedSite() }}</small></div>
+      <div class="chip">Behind_Metric<br><small>Behind Schedule & V/M</small></div>
+    </div>
+  </div>
+
+  <!-- upper section -->
+  <div class="upper-section">
+
+    <div class="filters-and-line">
+      <div class="top-line"></div>
+
+      <div class="small-filters">
+        <div class="mini-filter">
+          <div class="mini-filter-head">
+            <span>Freight Month</span>
+            <span class="search-icon">⌕</span>
+          </div>
+          <div class="mini-filter-body">
+            <div
+              class="mini-item"
+              *ngFor="let m of freightMonthOptions().slice(1)"
+              [class.active]="selectedFreightMonth() === m"
+              (click)="selectedFreightMonth.set(m)"
+            >
+              {{ m }}
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-filter">
+          <div class="mini-filter-head">
+            <span>DPR Month</span>
+            <span class="search-icon">⌕</span>
+          </div>
+          <div class="mini-filter-body">
+            <div
+              class="mini-item"
+              *ngFor="let d of dprMonthOptions().slice(1)"
+              [class.active]="selectedDprMonth() === d"
+              (click)="selectedDprMonth.set(d)"
+            >
+              {{ d }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-panel">
+      <div class="chart-title">Part Counts</div>
+
+      <div class="part-chart">
+        <div class="chart-grid">
+          <div class="grid-line line-1"></div>
+          <div class="grid-line line-2"></div>
+          <div class="grid-line line-3"></div>
+        </div>
+
+        <div class="bars-row">
+          <div class="bar-group" *ngFor="let bar of chartBars(); let i = index">
+            <div class="bar-value">{{ bar.value }}</div>
+            <div class="bar-outer">
+              <div class="bar-fill" [class.y2024]="i === 0" [class.y2025]="i === 1" [class.y2026]="i === 2"
+                   [style.height]="bar.height"></div>
+            </div>
+            <div class="bar-vertical-label">{{ bar.year }}</div>
+          </div>
+        </div>
+
+        <div class="chart-legend">
+          <span><i class="legend-box y2024"></i>2024</span>
+          <span><i class="legend-box y2025"></i>2025</span>
+          <span><i class="legend-box y2026"></i>2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bottom section -->
+  <div class="bottom-section">
+
+    <div class="left-grid-panel">
+      <div class="left-title">VHM | Site</div>
+
+      <div class="left-grid-head">
+        <div class="left-h blue">VHM <span class="search-small">⌕</span></div>
+        <div class="left-h">Site</div>
+      </div>
+
+      <div class="left-grid-body">
+        <div
+          class="left-row"
+          *ngFor="let row of tableRows()"
+          (click)="pickSite(row.siteCode)"
+        >
+          <div class="left-cell vhm-cell" [class.selected]="selectedVhm() === row.vhm || selectedSite() === row.siteCode">
+            {{ row.vhm }}
+          </div>
+          <div class="left-cell">{{ row.siteCode }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-panel">
+      <div class="table-title">Premium Freight Data - Aggregated Data</div>
+
+      <div class="table-toolbar">
+        <button class="tool-chip">⇅ Site</button>
+        <button class="tool-chip">⇅ Ship Year</button>
+        <button class="tool-chip">⇅ Month</button>
+        <button class="tool-chip">⇅ Measures</button>
+        <button class="tool-chip">⇅ part_number</button>
+      </div>
+
+      <div class="freight-table-wrap">
+        <table class="freight-table">
+          <thead>
+            <tr>
+              <th rowspan="2" class="site-col selected-col">{{ selectedSite() === 'ALL' ? 'Site' : selectedSite() }}</th>
+              <th colspan="2">2024</th>
+              <th colspan="2">2025</th>
+              <th colspan="2">2026</th>
+            </tr>
+            <tr>
+              <th>Qty</th>
+              <th>Tot Amt</th>
+              <th>Qty</th>
+              <th>Tot Amt</th>
+              <th>Qty</th>
+              <th>Tot Amt</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of tableRows()">
+              <td class="selected-col row-label">{{ r.siteCode }}</td>
+              <td>{{ r.qty2024 }}</td>
+              <td>{{ r.amount2024 | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td>{{ r.qty2025 }}</td>
+              <td>{{ r.amount2025 | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td>{{ r.qty2026 }}</td>
+              <td>{{ r.amount2026 | currency:'USD':'symbol':'1.0-0' }}</td>
+            </tr>
+
+            <tr *ngIf="tableRows().length === 0">
+              <td colspan="7" class="empty">No rows match the current filters.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

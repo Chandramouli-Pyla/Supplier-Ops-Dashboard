@@ -1,0 +1,614 @@
+<div class="portfolio-page">
+  <div class="top-strip">
+    <div class="strip-left">
+      <span class="menu-box">☰</span>
+      <span class="menu-box">⋯</span>
+    </div>
+
+    <div class="selection-chips">
+      <div class="chip">Site_NorthAmerica_...</div>
+      <div class="chip">bin_num</div>
+      <div class="chip">
+        Site_Code
+        <br />
+        <small>{{ selectedSite() }}</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="title-row">
+    <div class="page-title">{{ pageTitle() }}</div>
+    <div class="site-meta">{{ addressLine() }}</div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="left-panel">
+      <div class="mini-table">
+        <div class="mini-head">
+          <div>Site</div>
+          <div>Segment</div>
+        </div>
+
+        <div class="mini-row" *ngFor="let row of snapshot().siteSegmentRows">
+          <div>{{ row.site }}</div>
+          <div class="seg-yes">{{ row.segment }}</div>
+        </div>
+      </div>
+
+      <div class="left-block">
+        <div class="left-title">Premium Filters</div>
+        <div class="input-box">S+Z Flag</div>
+      </div>
+
+      <div class="left-block">
+        <div class="input-box">Premium Code Binning</div>
+        <div class="input-box">premium_code</div>
+      </div>
+
+      <div class="pager-dots">
+        <span class="arrow">‹</span>
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="left-block">
+        <div class="left-title">Supplier</div>
+        <div class="input-box strong">{{ selectedSupplierRegion() }}</div>
+      </div>
+
+      <div class="left-block"><div class="input-box">Parent Code</div></div>
+      <div class="left-block"><div class="input-box">Site Code</div></div>
+      <div class="left-block"><div class="input-box">Primary Site</div></div>
+      <div class="left-block"><div class="input-box">Site Country</div></div>
+      <div class="left-block"><div class="input-box">Site Type</div></div>
+      <div class="left-block"><div class="input-box">ILVS Flag</div></div>
+    </aside>
+
+    <section class="content">
+      <div class="hero-row">
+        <div class="kpi-box">KPI</div>
+
+        <div class="segment-banner" [ngClass]="segmentBannerClass()">
+          Segment {{ snapshot().segmentStatus }}
+        </div>
+
+        <div class="mini-kpi-box">systemic (kpi) | {{ snapshot().systemicKpi }}</div>
+        <div class="mini-kpi-box">behind (kpi) | {{ snapshot().behindKpi }}</div>
+        <div class="mini-kpi-box">demand (kpi) | {{ snapshot().demandKpi }}</div>
+      </div>
+
+      <div class="content-grid">
+        <div class="metrics-panel">
+          <div class="metric-col">
+            <div class="metric-block">
+              <div class="metric-title">Q1 | No</div>
+              <div class="metric-card small">
+                <div class="tab-head four">
+                  <span class="tab active">Q1</span>
+                  <span class="sub">Status</span>
+                  <span class="sub">↗</span>
+                  <span class="sub">Score</span>
+                </div>
+
+                <div class="metric-values two">
+                  <div>{{ snapshot().q1Status }}</div>
+                  <div>{{ snapshot().q1Score }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="metric-block">
+              <div class="metric-title">PPAP_comms</div>
+              <div class="metric-card small">
+                <div class="tab-head with-year-stack">
+                  <div class="year-stack">
+                    <span class="year-pill active">{{ snapshot().ppap.yearPrimary }}</span>
+                    <span class="year-pill muted">{{ snapshot().ppap.yearSecondary }}</span>
+                  </div>
+                  <span class="sub">Total</span>
+                  <span class="sub">Past Due</span>
+                </div>
+
+                <div class="metric-values two">
+                  <div>{{ snapshot().ppap.value1 }}</div>
+                  <div>{{ snapshot().ppap.value2 }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="metric-block">
+              <div class="metric-title">Commercial</div>
+              <div class="metric-subtitle">{{ snapshot().commercialDate }}</div>
+
+              <div class="metric-card small">
+                <div class="tab-head">
+                  <span class="tab active">Finance</span>
+                  <span class="sub">Distress</span>
+                  <span class="sub">FHR</span>
+                </div>
+
+                <div class="metric-values two">
+                  <div>{{ snapshot().commercialDistress }}</div>
+                  <div>{{ snapshot().commercialFhr }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="metric-block">
+              <div class="metric-title">TVM (parent)</div>
+              <div class="metric-card single">
+                <div class="tab-head">
+                  <span class="tab active">{{ snapshot().tvm.yearPrimary }}</span>
+                  <span class="sub">Gap</span>
+                </div>
+
+                <div class="metric-values one">
+                  <div>{{ snapshot().tvm.gap | number:'1.2-2' }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="metric-block">
+              <div class="metric-title">MSA</div>
+              <div class="metric-card status-strip">
+                <div class="tab-head">
+                  <span class="tab active">{{ snapshot().msa.tab }}</span>
+                  <span class="sub">{{ snapshot().msa.label }}</span>
+                </div>
+
+                <div class="status-row">
+                  <div class="status-pill red">Red</div>
+                  <div class="status-pill yellow">Yellow</div>
+                </div>
+
+                <div class="metric-values two color-boxes">
+                  <div class="bg-red">{{ snapshot().msa.red }}</div>
+                  <div class="bg-yellow">{{ snapshot().msa.yellow }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-col wide">
+            <div class="metric-grid">
+              <div class="metric-block">
+                <div class="metric-title">Behind Sched</div>
+                <div class="metric-card three-values">
+                  <div class="tab-head three">
+                    <span class="tab active">{{ snapshot().behindSched.tab }}</span>
+                    <span class="sub">{{ snapshot().behindSched.label1 }}</span>
+                    <span class="sub">{{ snapshot().behindSched.label2 }}</span>
+                  </div>
+
+                  <div class="metric-values three">
+                    <div>{{ snapshot().behindSched.valueText }}</div>
+                    <div>{{ snapshot().behindSched.value1 }}</div>
+                    <div>{{ snapshot().behindSched.value2 }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-title">DPR</div>
+                <div class="metric-card single">
+                  <div class="tab-head with-year-stack single-year-layout">
+                    <div class="year-stack">
+                      <span class="year-pill active">{{ snapshot().dpr.yearPrimary }}</span>
+                      <span class="year-pill muted">{{ snapshot().dpr.yearSecondary }}</span>
+                    </div>
+                    <span class="sub">Loss Unit</span>
+                  </div>
+
+                  <div class="metric-values one">
+                    <div>{{ snapshot().dpr.lossUnit }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-title">Premium Freight</div>
+                <div class="metric-card small">
+                  <div class="tab-head with-year-stack">
+                    <div class="year-stack">
+                      <span class="year-pill active">{{ snapshot().premiumFreight.yearPrimary }}</span>
+                      <span class="year-pill muted">{{ snapshot().premiumFreight.yearSecondary }}</span>
+                    </div>
+                    <span class="sub">Amt</span>
+                    <span class="sub">pieces</span>
+                  </div>
+
+                  <div class="metric-values two">
+                    <div>$ {{ snapshot().premiumFreight.amountK }} k</div>
+                    <div>{{ snapshot().premiumFreight.pieces }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-title">VOR</div>
+                <div class="metric-card single">
+                  <div class="tab-head">
+                    <span class="tab active">{{ snapshot().vor.tab }}</span>
+                    <span class="sub"># Current VoR</span>
+                  </div>
+
+                  <div class="metric-values one">
+                    <div>{{ snapshot().vor.currentVor }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-title">WERS</div>
+                <div class="metric-card small">
+                  <div class="tab-head with-year-stack">
+                    <div class="year-stack">
+                      <span class="year-pill active">{{ snapshot().wers.yearPrimary }}</span>
+                      <span class="year-pill muted">{{ snapshot().wers.yearSecondary }}</span>
+                    </div>
+                    <span class="sub">Alerts</span>
+                    <span class="sub">Parts</span>
+                  </div>
+
+                  <div class="metric-values two">
+                    <div>{{ snapshot().wers.alerts }}</div>
+                    <div>{{ snapshot().wers.parts }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-title">SREA</div>
+                <div class="metric-card small">
+                  <div class="tab-head with-year-stack">
+                    <div class="year-stack">
+                      <span class="year-pill active">{{ snapshot().srea.yearPrimary }}</span>
+                      <span class="year-pill muted">{{ snapshot().srea.yearSecondary }}</span>
+                    </div>
+                    <span class="sub"># Req.</span>
+                    <span class="sub">Parts</span>
+                  </div>
+
+                  <div class="metric-values two">
+                    <div>{{ snapshot().srea.req }}</div>
+                    <div>{{ snapshot().srea.parts }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-title">eCar OEE</div>
+                <div class="metric-card small">
+                  <div class="tab-head with-year-stack">
+                    <div class="year-stack">
+                      <span class="year-pill active">{{ snapshot().ecarOee.yearPrimary }}</span>
+                      <span class="year-pill muted">{{ snapshot().ecarOee.yearSecondary }}</span>
+                    </div>
+                    <span class="sub"># Req.</span>
+                    <span class="sub">Parts</span>
+                  </div>
+
+                  <div class="metric-values two">
+                    <div>{{ snapshot().ecarOee.req }}</div>
+                    <div>{{ snapshot().ecarOee.parts }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-block wide-block">
+                <div class="metric-title">FCSD (backlog)</div>
+                <div class="metric-card small">
+                  <div class="tab-head">
+                    <span class="tab active">{{ snapshot().fcsdBacklog.tab }}</span>
+                    <span class="sub">Parts</span>
+                    <span class="sub">Quantity</span>
+                  </div>
+
+                  <div class="metric-values two">
+                    <div>{{ snapshot().fcsdBacklog.parts }}</div>
+                    <div>{{ snapshot().fcsdBacklog.quantity | number }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bottom-lower">
+              <div class="breakdown-panel">
+                <div class="panel-head">SOT Case Breakdown</div>
+
+                <div class="sot-tiles">
+                  <div class="sot-tile" *ngFor="let tile of sotTiles()" [ngClass]="tile.cls">
+                    <div class="sot-label">{{ tile.label }}</div>
+                    <div class="sot-value">{{ tile.value }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="release-panel">
+          <div class="release-head">Release vs Required</div>
+
+          <div class="release-table">
+            <div class="release-top">
+              <div></div>
+              <div>Historical</div>
+              <div>Short</div>
+              <div>Near</div>
+            </div>
+
+            <div class="release-row" *ngFor="let r of releaseRows()">
+              <div class="group">{{ r.group }}</div>
+              <div class="cell dark">{{ r.historical }}</div>
+              <div class="cell blue">{{ r.short }}</div>
+              <div class="cell light">{{ r.near }}</div>
+            </div>
+          </div>
+
+          <div class="plant-panel">
+            <div class="panel-head">Plant Breakdown</div>
+
+            <div class="plant-grid">
+              <div class="plant-card" *ngFor="let p of plantTiles()">
+                <div class="plant-label">{{ p.label }}</div>
+                <div class="plant-value">{{ p.value }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- continuation section -->
+      <div class="continuation-section">
+        <div class="trend-chart-card">
+          <div class="trend-chart-wrap">
+            <div class="chart-y-axis">
+              <span>5</span>
+              <span>4</span>
+              <span>3</span>
+              <span>2</span>
+              <span>1</span>
+              <span>0</span>
+            </div>
+
+            <div class="chart-main">
+              <div class="chart-grid-lines">
+                <div class="grid-line" *ngFor="let line of [1,2,3,4,5]"></div>
+              </div>
+
+              <div class="bars-layer">
+                <div
+                  class="bar-col"
+                  *ngFor="let point of trendChart()"
+                >
+                  <div class="bar-stack" [ngClass]="segmentClass(point.segmentLevel)" [style.height]="barHeight(point)"></div>
+
+                  <div class="line-dot systemic" [style.bottom]="lineBottom(point.systemicKpi)"></div>
+                  <div class="line-dot demand" [style.bottom]="lineBottom(point.demandKpi)"></div>
+                  <div class="line-dot behind" [style.bottom]="lineBottom(point.behindKpi)"></div>
+
+                  <div class="x-label">{{ point.label }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-legend">
+            <span><i class="legend systemic"></i> Systemic KPI</span>
+            <span><i class="legend supplier"></i> Supplier Risk</span>
+            <span><i class="legend demand"></i> Demand KPI</span>
+            <span><i class="legend behind"></i> Behind KPI</span>
+          </div>
+        </div>
+
+        <div class="summary-matrices">
+          <div class="summary-table one">
+            <table>
+              <thead>
+                <tr>
+                  <th>Site</th>
+                  <th class="gold-head">Segment KPI</th>
+                  <th>Segment</th>
+                  <th>Behind KPI Sched</th>
+                  <th>Behind KPI Freight</th>
+                  <th>Behind KPI DPR</th>
+                  <th>Systemic KPI Distress</th>
+                  <th>Systemic KPI Non Q1</th>
+                  <th class="dark-head">Demand KPI History</th>
+                  <th class="dark-head">Demand KPI Short</th>
+                  <th class="dark-head">Demand KPI Near</th>
+                  <th>Q1</th>
+                  <th>Q1 Status</th>
+                  <th>Q1 Score</th>
+                  <th>Distress</th>
+                  <th>FHR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="left-strong">{{ snapshot().siteCode }}</td>
+                  <td class="teal-cell">{{ summary1().segmentKpi }}</td>
+                  <td class="red-cell">{{ summary1().segment }}</td>
+                  <td>{{ summary1().behindSched }}</td>
+                  <td>{{ summary1().behindFreight }}</td>
+                  <td>{{ summary1().behindDpr }}</td>
+                  <td>{{ summary1().systemicDistress }}</td>
+                  <td>{{ summary1().systemicNonQ1 }}</td>
+                  <td>{{ summary1().demandHistory }}</td>
+                  <td>{{ summary1().demandShort }}</td>
+                  <td>{{ summary1().demandNear }}</td>
+                  <td>{{ summary1().q1 }}</td>
+                  <td>{{ summary1().q1Status }}</td>
+                  <td>{{ summary1().q1Score }}</td>
+                  <td>{{ summary1().distress }}</td>
+                  <td>{{ summary1().fhr }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="summary-table two">
+            <table>
+              <thead>
+                <tr>
+                  <th>Site</th>
+                  <th class="gold-head">Q1MSA KPI</th>
+                  <th>MSA Last Updated</th>
+                  <th>MSA (all) Red</th>
+                  <th>MSA (all) Yellow</th>
+                  <th>MSA (delivery) Red</th>
+                  <th>MSA (delivery) Yellow</th>
+                  <th class="gold-head">SOT KPI</th>
+                  <th>SOT Red</th>
+                  <th>SOT Yellow</th>
+                  <th>SOT Green</th>
+                  <th>SOT Reactive</th>
+                  <th>SOT Proactive</th>
+                  <th class="gold-head">DPR KPI</th>
+                  <th>DPR (loss) 2025</th>
+                  <th>DPR (loss) 2024</th>
+                  <th class="gold-head">Freight KPI</th>
+                  <th>Freight 2025 Amount</th>
+                  <th>Freight 2025 Pieces</th>
+                  <th>Freight 2024 Amount</th>
+                  <th>Freight 2024 Pieces</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="left-strong">{{ snapshot().siteCode }}</td>
+                  <td class="teal-cell">{{ summary2().q1MsaKpi }}</td>
+                  <td>{{ summary2().msaLastUpdated }}</td>
+                  <td>{{ summary2().msaAllRed }}</td>
+                  <td>{{ summary2().msaAllYellow }}</td>
+                  <td>{{ summary2().msaDeliveryRed }}</td>
+                  <td>{{ summary2().msaDeliveryYellow }}</td>
+                  <td class="teal-cell">{{ summary2().sotKpi }}</td>
+                  <td>{{ summary2().sotRed }}</td>
+                  <td>{{ summary2().sotYellow }}</td>
+                  <td>{{ summary2().sotGreen }}</td>
+                  <td>{{ summary2().sotReactive }}</td>
+                  <td>{{ summary2().sotProactive }}</td>
+                  <td class="gold-value">{{ summary2().dprKpi }}</td>
+                  <td>{{ summary2().dprLoss2025 }}</td>
+                  <td>{{ summary2().dprLoss2024 }}</td>
+                  <td class="gold-value">{{ summary2().freightKpi }}</td>
+                  <td>{{ summary2().freight2025Amount | number }}</td>
+                  <td>{{ summary2().freight2025Pieces }}</td>
+                  <td>{{ summary2().freight2024Amount | number }}</td>
+                  <td>{{ summary2().freight2024Pieces }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="summary-table three">
+            <table>
+              <thead>
+                <tr>
+                  <th>Site</th>
+                  <th class="gold-head">Behind KPI</th>
+                  <th>Behind Sched Consec Weeks</th>
+                  <th>Behind Sched Consec Months</th>
+                  <th>Under Transit Consec Weeks</th>
+                  <th>Under Transit Consec Months</th>
+                  <th class="gold-head">FCSD KPI</th>
+                  <th>FCSD (backlog) Parts</th>
+                  <th>FCSD (backlog) pieces</th>
+                  <th># Current VOR</th>
+                  <th class="gold-head">WERS KPI</th>
+                  <th>WERS 2025 Alerts</th>
+                  <th>WERS 2025 Parts</th>
+                  <th>WERS 2024 Alerts</th>
+                  <th>WERS 2024 Parts</th>
+                  <th class="gold-head">SREA KPI</th>
+                  <th>SREA 2025 Requests</th>
+                  <th>SREA 2025 Parts</th>
+                  <th>SREA 2024 Requests</th>
+                  <th>SREA 2024 Parts</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="left-strong">{{ snapshot().siteCode }}</td>
+                  <td class="gold-value">{{ summary3().behindKpi }}</td>
+                  <td>{{ summary3().behindSchedConsecWeeks }}</td>
+                  <td>{{ summary3().behindSchedConsecMonths }}</td>
+                  <td>{{ summary3().underTransitConsecWeeks }}</td>
+                  <td>{{ summary3().underTransitConsecMonths }}</td>
+                  <td class="gold-value">{{ summary3().fcsdKpi }}</td>
+                  <td>{{ summary3().fcsdBacklogParts }}</td>
+                  <td>{{ summary3().fcsdBacklogPieces | number }}</td>
+                  <td>{{ summary3().currentVor }}</td>
+                  <td class="gold-value">{{ summary3().wersKpi }}</td>
+                  <td>{{ summary3().wers2025Alerts }}</td>
+                  <td>{{ summary3().wers2025Parts }}</td>
+                  <td>{{ summary3().wers2024Alerts }}</td>
+                  <td>{{ summary3().wers2024Parts }}</td>
+                  <td class="gold-value">{{ summary3().sreaKpi }}</td>
+                  <td>{{ summary3().srea2025Requests }}</td>
+                  <td>{{ summary3().srea2025Parts }}</td>
+                  <td>{{ summary3().srea2024Requests }}</td>
+                  <td>{{ summary3().srea2024Parts }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="product-portfolio-section">
+          <div class="product-header-row">
+            <div class="product-title-box">Product Portfolio</div>
+            <div class="product-divider"></div>
+          </div>
+
+          <div class="plant-summary-grid">
+            <div class="summary-col">
+              <div class="summary-line">
+                <strong>Supplier Shipping Code(s) : [ {{ productPortfolio().supplierShippingCodes.length }} ] -</strong>
+                {{ productPortfolio().supplierShippingCodes.join(' | ') }}
+              </div>
+            </div>
+
+            <div class="summary-col center">
+              <div class="summary-line">
+                <strong>VO Plants: [ {{ productPortfolio().voPlants.length }} ] -</strong>
+                {{ productPortfolio().voPlants.join(' / ') }}
+              </div>
+            </div>
+
+            <div class="summary-col right">
+              <div class="summary-line">
+                <strong>PTO Plants: [ {{ productPortfolio().ptoPlants.length }} ] -</strong>
+                {{ productPortfolio().ptoPlants.length ? productPortfolio().ptoPlants.join(' / ') : '-' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="plant-summary-grid second">
+            <div class="summary-col">
+              <div class="summary-subtitle">Product Portfolio</div>
+              <div class="summary-muted">
+                Lead VHM: {{ productPortfolio().leadVhm }} | Amount: {{ productPortfolio().amount | number:'1.0-0' }} | Distressed Supplier: {{ productPortfolio().distressedSupplier }}
+              </div>
+            </div>
+
+            <div class="summary-col center">
+              <div class="summary-link">Plant | Vehicle - Profile</div>
+            </div>
+
+            <div class="summary-col right">
+              <div class="summary-line">
+                <strong>Other Plants: [ {{ productPortfolio().otherPlants.length }} ] -</strong>
+                {{ productPortfolio().otherPlants.join(' / ') }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

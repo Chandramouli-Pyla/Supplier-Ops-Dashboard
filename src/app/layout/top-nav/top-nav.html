@@ -1,0 +1,14 @@
+<mat-toolbar class="qlik-toolbar">
+  <div class="menu-container full-width">
+    @for (item of items; track item.label) {
+      <a
+        class="menu-item"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        {{ item.label }}
+      </a>
+    }
+  </div>
+</mat-toolbar>

@@ -1,0 +1,229 @@
+<div class="adhoc-page">
+    <div class="top-strip">
+        <div class="strip-left">
+            <span class="menu-box">☰</span>
+            <span class="menu-box">⋯</span>
+        </div>
+        <div class="sub-strip">
+            <div class="sub-nav">
+                <span>Assets</span>
+                <span>Sheets</span>
+                <span>Bookmarks</span>
+            </div>
+
+            <div class="selected-strip">
+                <div class="selected-chip" *ngFor="let chip of selectedChips()">
+                    <div class="chip-title">{{ chip.label }}</div>
+                    <div class="chip-value">{{ chip.value }}</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="panels-grid">
+        <div class="panel-card panel-tall">
+            <div class="panel-meta">{{ panels()[0].countLabel }}: {{ panelCount('release') }}</div>
+            <div class="panel-head">
+                <span class="search-icon">⌕</span>
+                <span>{{ panels()[0].title }}</span>
+            </div>
+
+            <div class="panel-list">
+                <label class="list-item" *ngFor="let item of panels()[0].items"
+                    [class.selected]="isSelected('release', item)">
+                    <input type="checkbox" [checked]="isSelected('release', item)"
+                        (change)="toggleItem('release', item)" />
+                    <span>{{ item }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-meta">{{ panels()[1].countLabel }}: {{ panelCount('behind') }}</div>
+            <div class="panel-head">
+                <span class="search-icon">⌕</span>
+                <span>{{ panels()[1].title }}</span>
+            </div>
+
+            <div class="panel-list">
+                <label class="list-item" *ngFor="let item of panels()[1].items"
+                    [class.selected]="isSelected('behind', item)">
+                    <input type="checkbox" [checked]="isSelected('behind', item)"
+                        (change)="toggleItem('behind', item)" />
+                    <span>{{ item }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-meta">{{ panels()[2].countLabel }}: {{ panelCount('delivery') }}</div>
+            <div class="panel-head">
+                <span class="search-icon">⌕</span>
+                <span>{{ panels()[2].title }}</span>
+            </div>
+
+            <div class="panel-list">
+                <label class="list-item" *ngFor="let item of panels()[2].items"
+                    [class.selected]="isSelected('delivery', item)">
+                    <input type="checkbox" [checked]="isSelected('delivery', item)"
+                        (change)="toggleItem('delivery', item)" />
+                    <span>{{ item }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-meta">{{ panels()[3].countLabel }}: {{ panelCount('commercial') }}</div>
+            <div class="panel-head">
+                <span class="search-icon">⌕</span>
+                <span>{{ panels()[3].title }}</span>
+            </div>
+
+            <div class="panel-list">
+                <label class="list-item" *ngFor="let item of panels()[3].items"
+                    [class.selected]="isSelected('commercial', item)">
+                    <input type="checkbox" [checked]="isSelected('commercial', item)"
+                        (change)="toggleItem('commercial', item)" />
+                    <span>{{ item }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-card panel-tall">
+            <div class="panel-head with-actions">
+                <div class="left-head">
+                    <span class="search-icon">⌕</span>
+                    <span>{{ panels()[4].title }}</span>
+                </div>
+                <div class="head-actions">
+                    <button title="Download">↓</button>
+                    <button title="More">⋯</button>
+                </div>
+            </div>
+
+            <div class="panel-list">
+                <label class="list-item" *ngFor="let item of panels()[4].items"
+                    [class.selected]="isSelected('q1msa', item)">
+                    <input type="checkbox" [checked]="isSelected('q1msa', item)" (change)="toggleItem('q1msa', item)" />
+                    <span>{{ item }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-meta">{{ panels()[5].countLabel }}: {{ panelCount('premium') }}</div>
+            <div class="panel-head">
+                <span class="search-icon">⌕</span>
+                <span>{{ panels()[5].title }}</span>
+            </div>
+
+            <div class="panel-list">
+                <label class="list-item" *ngFor="let item of panels()[5].items"
+                    [class.selected]="isSelected('premium', item)">
+                    <input type="checkbox" [checked]="isSelected('premium', item)"
+                        (change)="toggleItem('premium', item)" />
+                    <span>{{ item }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-meta">{{ panels()[6].countLabel }}: {{ panelCount('sot') }}</div>
+            <div class="panel-head">
+                <span class="search-icon">⌕</span>
+                <span>{{ panels()[6].title }}</span>
+            </div>
+
+            <div class="panel-list">
+                <label class="list-item" *ngFor="let item of panels()[6].items"
+                    [class.selected]="isSelected('sot', item)">
+                    <input type="checkbox" [checked]="isSelected('sot', item)" (change)="toggleItem('sot', item)" />
+                    <span>{{ item }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-meta">{{ panels()[7].countLabel }}: {{ panelCount('q1') }}</div>
+            <div class="panel-head">
+                <span class="search-icon">⌕</span>
+                <span>{{ panels()[7].title }}</span>
+            </div>
+
+            <div class="panel-list">
+                <label class="list-item" *ngFor="let item of panels()[7].items"
+                    [class.selected]="isSelected('q1', item)">
+                    <input type="checkbox" [checked]="isSelected('q1', item)" (change)="toggleItem('q1', item)" />
+                    <span>{{ item }}</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-card ghost-panel"></div>
+    </div>
+    <div class="separator-line" *ngIf="showResultTable()"></div>
+
+    <div class="adhoc-table-section" *ngIf="showResultTable()">
+        <div class="table-wrap">
+            <div class="adhoc-table-head">
+                <div>
+                    <div class="table-title">ADHOC Table</div>
+                    <div class="table-summary">
+                        Total SOT Sites : {{ tableSummary().totalSotSites }} |
+                        # Segment Sites : {{ tableSummary().segmentSites }} |
+                        # Adhoc Sites : {{ tableSummary().adhocSites }} |
+                        # DPR Sites : {{ tableSummary().dprSites }} |
+                        # Premium Sites : {{ tableSummary().premiumSites }}
+                    </div>
+                </div>
+
+                <div class="table-actions">
+                    <button title="Download">↓</button>
+                    <button title="Expand">↗</button>
+                    <button title="More">⋯</button>
+                </div>
+            </div>
+
+            <table class="adhoc-table">
+                <thead>
+                    <tr>
+                        <th>Site_Code</th>
+                        <th>VHM</th>
+                        <th>Site_Name</th>
+                        <th>City,State, Country</th>
+                        <th>week</th>
+                        <th>Release &gt; MPPC &gt; MPW (-5 wks to now)</th>
+                        <th>Release &gt; MPPC &lt; MPW (-5 wks to now)</th>
+                        <th>Release &lt; MPPC &gt; MPW (-5 wks to now)</th>
+                        <th>Behind Schedule Flag</th>
+                        <th>Behind Schedule Quantity</th>
+                        <th>Behind Count</th>
+                        <th>Q1 Status</th>
+                        <th>Gross DPR Loss</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let row of tableRows()">
+                        <td>{{ row.siteCode }}</td>
+                        <td>{{ row.vhm }}</td>
+                        <td>{{ row.siteName }}</td>
+                        <td>{{ row.cityStateCountry }}</td>
+                        <td>{{ row.week }}</td>
+                        <td class="cyan-cell">{{ row.releaseGtMppcGtMpw }}</td>
+                        <td class="cyan-cell">{{ row.releaseGtMppcLtMpw }}</td>
+                        <td class="cyan-cell">{{ row.releaseLtMppcGtMpw }}</td>
+                        <td class="cyan-cell">{{ row.behindScheduleFlag }}</td>
+                        <td class="cyan-cell">{{ row.behindScheduleQuantity }}</td>
+                        <td class="cyan-cell">{{ row.behindCount }}</td>
+                        <td class="status-red">{{ row.q1Status }}</td>
+                        <td class="cyan-cell">{{ row.grossDprLoss }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
